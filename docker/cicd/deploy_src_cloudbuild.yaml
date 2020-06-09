@@ -3,7 +3,7 @@ steps:
     entrypoint: 'bash'
     args: [ '-c', 'gcloud secrets versions access latest --secret=cicd > cicd.json' ]
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-f', 'docker/cicd/dataflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-dataflow', '.']
+    args: ['build', '-f', 'docker/cicd/dataflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-dataflow', '--build-arg _ENV=${_ENV}', '.']
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
@@ -12,10 +12,10 @@ steps:
         docker run -i
         -v "$(pwd)"/src/dataflow:/workspace/dataflow
         -v "$(pwd)"/src/shared:/workspace/shared
-        gcr.io/$PROJECT_ID/cicd-dataflow:lastest
+        gcr.io/$PROJECT_ID/cicd-dataflow
         jeeves dataflow deploy-all ${_ENV}
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-f', 'docker/cicd/airflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-airflow', '.']
+    args: ['build', '-f', 'docker/cicd/airflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-airflow', '--build-arg _ENV=${_ENV}','.']
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
@@ -24,10 +24,10 @@ steps:
         docker run -i
         -v "$(pwd)"/src/airflow:/workspace/airflow
         -v "$(pwd)"/src/shared:/workspace/shared
-        gcr.io/$PROJECT_ID/cicd-airflow:latest
+        gcr.io/$PROJECT_ID/cicd-airflow
         jeeves airflow deploy-all ${_ENV}
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-f', 'docker/cicd/workspace/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-workspace', '.']
+    args: ['build', '-f', 'docker/cicd/workspace/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-workspace', '--build-arg _ENV=${_ENV}', '.']
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
@@ -35,12 +35,12 @@ steps:
       - >
         docker run -i
         -v "$(pwd)"/src:/workspace
-        gcr.io/$PROJECT_ID/cicd-workspace:latest
+        gcr.io/$PROJECT_ID/cicd-workspace
         jeeves bigquery_migration up ${_ENV}
 substitutions:
   _ENV: local
 images:
-- 'gcr.io/$PROJECT_ID/cicd-dataflow:latest'
-- 'gcr.io/$PROJECT_ID/cicd-airflow:latest'
-- 'gcr.io/$PROJECT_ID/cicd-workspace:latest'
+- 'gcr.io/$PROJECT_ID/cicd-dataflow'
+- 'gcr.io/$PROJECT_ID/cicd-airflow'
+- 'gcr.io/$PROJECT_ID/cicd-workspace'
 

@@ -3,10 +3,10 @@ steps:
   entrypoint: 'bash'
   args: [ '-c', 'gcloud secrets versions access latest --secret=cicd > cicd.json' ]
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-f', 'docker/cicd/airflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-airflow:${_PR_NUMBER}', '.']
+  args: ['build', '-f', 'docker/cicd/airflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-airflow:${_PR_NUMBER}', '--build-arg _ENV=${_ENV}', '.']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['run', 'gcr.io/$PROJECT_ID/cicd-airflow:${_PR_NUMBER}']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-f', 'docker/cicd/dataflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-dataflow:${_PR_NUMBER}', '.']
+  args: ['build', '-f', 'docker/cicd/dataflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-dataflow:${_PR_NUMBER}', '--build-arg _ENV=${_ENV}', '.']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['run', 'gcr.io/$PROJECT_ID/cicd-dataflow:${_PR_NUMBER}']
