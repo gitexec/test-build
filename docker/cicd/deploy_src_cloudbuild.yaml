@@ -3,7 +3,7 @@ steps:
     entrypoint: 'bash'
     args: [ '-c', 'gcloud secrets versions access latest --secret=cicd > cicd.json' ]
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-f', 'docker/cicd/dataflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-dataflow:latest', '.']
+    args: ['build', '-f', 'docker/cicd/dataflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-dataflow', '.']
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
@@ -15,7 +15,7 @@ steps:
         gcr.io/$PROJECT_ID/cicd-dataflow:lastest
         jeeves dataflow deploy-all ${_ENV}
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-f', 'docker/cicd/airflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-airflow:latest', '.']
+    args: ['build', '-f', 'docker/cicd/airflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-airflow', '.']
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
@@ -27,7 +27,7 @@ steps:
         gcr.io/$PROJECT_ID/cicd-airflow:latest
         jeeves airflow deploy-all ${_ENV}
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-f', 'docker/cicd/workspace/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-workspace:latest', '.']
+    args: ['build', '-f', 'docker/cicd/workspace/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-workspace', '.']
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
