@@ -1,0 +1,71 @@
+{
+  "airflow_vars": {
+    "dags": {
+      "bq_to_wrench": {
+        "tables": [
+          {"name": "pii.users", "created_field": "created_at"},
+          {"name": "staging.emails", "created_field": "created"},
+          {"name": "staging.flat_site_visitors", "created_field": "created_at"},
+          {"name": "staging.orders", "created_field": "created"},
+          {"name": "staging.product_reviews", "created_field": "created_at"},
+          {"name": "staging.sites", "created_field": "created_at"},
+          {"name": "staging.tasks", "created_field": "created"},
+          {"name": "staging.users", "created_field": "created_at"},
+          {"name": "staging.contacts", "created_field": "created_at"}
+        ],
+        "poke_interval": 60,
+        "poke_timeout": 1800
+      },
+      "vibe_to_bq_initial_load": {
+        "poke_interval": 60,
+        "poke_timeout": 1800
+      },
+      "lake_to_staging": {
+        "poke_interval": 60,
+        "poke_timeout": 1800
+      },
+      "wrench_to_lake": {
+        "poke_interval": 60,
+        "poke_timeout": 1800
+      },
+      "cdc_from_gcs_to_lake": {
+        "poke_interval": 60,
+        "poke_timeout": 1800
+      },
+      "vibe_to_lake": {
+        "tables": [
+          "pyr_contact_categories",
+          "pyr_contact_emails",
+          "pyr_contact_phone_numbers",
+          "pyr_contacts",
+          "pyr_contacts_contact_categories",
+          "pyr_ecards",
+          "pyr_events",
+          "pyr_message_recipients",
+          "pyr_messages",
+          "pyr_microsites",
+          "pyr_rank_definitions",
+          "pyr_resource_assets",
+          "pyr_resources",
+          "pyr_sites",
+          "pyr_sms",
+          "pyr_user_tasks",
+          "tree_commission_bonuses",
+          "tree_commission_details",
+          "tree_commission_runs",
+          "tree_commissions",
+          "tree_order_items",
+          "tree_order_statuses",
+          "tree_order_types",
+          "tree_orders",
+          "tree_user_statuses",
+          "tree_user_types",
+          "tree_users",
+          "users"
+        ],
+        "poke_interval": 60,
+        "poke_timeout": 1800
+      }
+    }
+  }
+}

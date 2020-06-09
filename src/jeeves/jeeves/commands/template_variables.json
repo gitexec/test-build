@@ -1,0 +1,26 @@
+{
+    "dags": [
+        "bq_to_wrench",
+        "cdc_from_gcs_to_lake",
+        "lake_to_staging",
+        "wrench_to_lake"
+    ],
+    "dag_templates": [
+        "vibe_to_bq_initial_load",
+        "vibe_to_lake"
+    ],
+    "beam_templates": [
+        "load_cdc_from_gcs_to_lake",
+        "load_lake_to_pii_users",
+        "load_lake_to_staging_contacts",
+        "load_lake_to_staging_orders",
+        "load_lake_to_staging_users",
+        "load_sql_to_bq",
+        "load_vibe_to_lake",
+        "load_wrench_to_lake",
+        "offload_bq_to_cs"
+    ],
+    "clients": [
+        "worldventures"
+    ]
+}

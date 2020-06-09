@@ -1,0 +1,24 @@
+from google.cloud import bigquery
+from migrations.migration import BigQueryMigration
+
+dataset_name = '<placeholder>'
+table_name = '<placeholder>'
+
+
+def up(client):
+    migration = BigQueryMigration(client)
+
+    #  dataset = migration.dataset(dataset_name)  # use me if you are NOT creating a new dataset. -- ndg 2/5/20
+    dataset = migration.create_dataset(dataset_name)  # use me if you are creating a new dataset. -- ndg 2/5/20
+
+    return dataset
+
+
+def down(client):
+    migration = BigQueryMigration(client)
+    dataset = migration.dataset(dataset_name)
+
+    """
+    #  required code for deleting a newly created dataset -- ndg 2/5/20
+    migration.delete_dataset(dataset_name)
+    """

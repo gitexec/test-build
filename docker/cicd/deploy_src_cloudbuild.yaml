@@ -1,0 +1,46 @@
+steps:
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: 'bash'
+    args: [ '-c', 'gcloud secrets versions access latest --secret=cicd > cicd.json' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-f', 'docker/cicd/dataflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-dataflow:latest', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - >
+        docker run -i
+        -v "$(pwd)"/src/dataflow:/workspace/dataflow
+        -v "$(pwd)"/src/shared:/workspace/shared
+        gcr.io/$PROJECT_ID/cicd-dataflow:lastest
+        jeeves dataflow deploy-all ${_ENV}
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-f', 'docker/cicd/airflow/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-airflow:latest', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - >
+        docker run -i
+        -v "$(pwd)"/src/airflow:/workspace/airflow
+        -v "$(pwd)"/src/shared:/workspace/shared
+        gcr.io/$PROJECT_ID/cicd-airflow:latest
+        jeeves airflow deploy-all ${_ENV}
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-f', 'docker/cicd/workspace/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/cicd-workspace:latest', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - >
+        docker run -i
+        -v "$(pwd)"/src:/workspace
+        gcr.io/$PROJECT_ID/cicd-workspace:latest
+        jeeves bigquery_migration up ${_ENV}
+substitutions:
+  _ENV: local
+images:
+- 'gcr.io/$PROJECT_ID/cicd-dataflow:latest'
+- 'gcr.io/$PROJECT_ID/cicd-airflow:latest'
+- 'gcr.io/$PROJECT_ID/cicd-workspace:latest'
+
